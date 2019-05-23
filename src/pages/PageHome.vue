@@ -1,4 +1,5 @@
 <template>
+<!-- lesson 56 -->
   <div>
     <AppHero />
     <div class="container">
