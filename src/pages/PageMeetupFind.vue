@@ -60,14 +60,14 @@
   export default {
     computed: {
       ...mapState({
-        meetups: state => state.meetups
+        meetups: state => state.meetups.items
       })
     },
     created () {
       this.fetchMeetups();
     }, 
     methods: {
-      ...mapActions(['fetchMeetups'])
+      ...mapActions('meetups', ['fetchMeetups'])
     }
   }
 </script>

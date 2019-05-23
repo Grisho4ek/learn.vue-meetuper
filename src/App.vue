@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <TheNavbar />
-    <router-view />
+    <div class="page-wrapper">
+      <router-view />
+    </div>
     <TheFooter />
   </div>
 </template>
@@ -19,6 +21,10 @@ export default {
 </script>
 
 <style lang="scss">
+
+.page-wrapper {
+  min-height: 61vh;
+}
 @import 'assets/css/spacing.css';
 @import '~bulma/bulma.sass';
 
