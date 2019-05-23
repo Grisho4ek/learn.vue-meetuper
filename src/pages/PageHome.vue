@@ -1,5 +1,5 @@
 <template>
-<!-- lesson 56 -->
+<!-- lesson 56, 67 -->
   <div>
     <AppHero />
     <div class="container">
@@ -8,7 +8,9 @@
         <h1 class="title is-inline">Featured Meetups in "Location"</h1>
         <AppDropdown />
         <button class="button is-primary is-pulled-right m-r-sm">Create Meetups</button>
-        <button class="button is-primary is-pulled-right m-r-sm">All</button>
+        <router-link :to="{ name: 'PageMeetupFind' }">
+          <button class="button is-primary is-pulled-right m-r-sm">All</button>
+        </router-link>
       </div>
       <div class="row columns is-multiline">
         <!-- meetuoItem -->
@@ -35,29 +37,26 @@
 </template>
 
 <script>
-  import axios from 'axios'
   import CategoryItem from '@/components/CategoryItem'
   import MeetupItem from '@/components/MeetupItem'
+  import { mapActions, mapState } from 'vuex'
   export default {
     components: {
       CategoryItem,
       MeetupItem
     },
-    data(){
-      return {
-        categories: [],
-        meetups: []
-      }
+    computed: {
+      ...mapState({
+        meetups: state => state.meetups,
+        categories: state => state.categories
+      })
     },
-    created(){
-      axios.get('/api/v1/meetups')
-        .then(res => {
-          this.meetups = res.data
-        })
-      axios.get('/api/v1/categories')
-        .then(res => {
-          this.categories = res.data
-        })
+    created() {
+      this.fetchMeetups()
+      this.fetchCategories()
+    },
+    methods: {
+      ...mapActions(['fetchMeetups', 'fetchCategories'])
     }
   }
 </script>
