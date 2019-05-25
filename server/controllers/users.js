@@ -59,7 +59,7 @@ exports.login = function(req, res, next) {
       
     } else {
       return res.status(422).send({
-        erors: {
+        errors: {
           'message': 'Invalid password or email'
         }
       })

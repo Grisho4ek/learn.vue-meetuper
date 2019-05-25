@@ -95,7 +95,9 @@ export default {
       this.$v.form.$touch()
       this.$store.dispatch("auth/loginWithEmailAndPassword", this.form)
         .then(() => { this.$router.push('/')})
-        .catch((err) => console.log(err))
+        .catch((errorMessage) => {
+          this.$toasted.error(errorMessage, {duration: 5000})
+        })
     }
   }
 };
