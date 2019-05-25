@@ -13,7 +13,19 @@ exports.getUsers = function(req, res) {
   });
 }
 
-exports.login = function(req, res) {
+exports.getCurrentUser = function (req, res) {
+  const user = req.user;
+
+  if(!user) {
+    return res.sendStatus(422);
+  }
+
+  // For Session Auth!
+  // return res.json(user);
+  return res.json(user.toAuthJSON());
+};
+
+exports.login = function(req, res, next) {
   const { email, password } = req.body;
 
   if(!email) {
@@ -33,9 +45,26 @@ exports.login = function(req, res) {
   }
 
   return passport.authenticate('local', (err,passportUser) => {
+    if(err) {
+      return next(err)
+    }
+    if(passportUser) {
+// Only For Session Auth!!!
+      // req.login(passportUser, function (err) {
+      //   if (err) { next(err); }
+      //   return res.json(passportUser)
+      // });
 
-  })
-  
+      return res.json(passportUser.toAuthJSON())
+      
+    } else {
+      return res.status(422).send({
+        erors: {
+          'message': 'Invalid password or email'
+        }
+      })
+    }
+  })(req, res, next)
 }
 
 exports.register = function(req, res) {
@@ -77,4 +106,9 @@ exports.register = function(req, res) {
     return res.json(savedUser)
 
   })
+}
+
+exports.logout = function(req, res) {
+  req.logout()
+  return res.json({status: 'Session destroyed!'})
 }

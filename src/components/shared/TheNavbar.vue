@@ -6,7 +6,13 @@
           <h1 class="title is-4">VueMeetuper</h1>
         </router-link>
       </a>
-      <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+      <a
+        role="button"
+        class="navbar-burger burger"
+        aria-label="menu"
+        aria-expanded="false"
+        data-target="navbarBasicExample"
+      >
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
@@ -15,46 +21,41 @@
 
     <div id="navbarBasicExample" class="navbar-menu">
       <div class="navbar-start">
-        <router-link :to="{ name: 'PageHome' }" class="navbar-item">
-          Home
-        </router-link>
+        <router-link :to="{ name: 'PageHome' }" class="navbar-item">Home</router-link>
 
-        <router-link :to="{ name: 'PageMeetupFind' }" class="navbar-item">
-          Find
-        </router-link>
+        <router-link :to="{ name: 'PageMeetupFind' }" class="navbar-item">Find</router-link>
 
         <div class="navbar-item has-dropdown is-hoverable">
-          <a class="navbar-link">
-            More
-          </a>
+          <a class="navbar-link">More</a>
 
           <div class="navbar-dropdown">
-            <a class="navbar-item">
-              About
-            </a>
-            <a class="navbar-item">
-              Jobs
-            </a>
-            <a class="navbar-item">
-              Contact
-            </a>
+            <a class="navbar-item">About</a>
+            <a class="navbar-item">Jobs</a>
+            <a class="navbar-item">Contact</a>
             <hr class="navbar-divider">
-            <a class="navbar-item">
-              Report an issue
-            </a>
+            <a class="navbar-item">Report an issue</a>
           </div>
         </div>
       </div>
 
       <div class="navbar-end">
         <div class="navbar-item">
+          <div v-if="user">Welcome {{user.username}}</div>
+        </div>
+        <div v-if="user" class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link">Account</a>
+          <div class="navbar-dropdown">
+            <a href="#" class="navbar-item">Profile</a>
+            <hr class="navbar-divider">
+            <a class="navbar-item" @click.prevent="logout" >Logout</a>
+          </div>
+        </div>
+        <div v-else class="navbar-item has-dropdown">
           <div class="buttons">
-            <router-link :to="{ name: 'PageRegister'}" class="button is-primary">
+            <router-link :to="{name: 'PageRegister'}" class="button is-primary">
               <strong>Sign up</strong>
             </router-link>
-            <router-link :to="{ name: 'PageLogin' }" class="button is-light">
-                Log in
-            </router-link>
+            <router-link :to="{name: 'PageLogin'}" class="button is-light">Log in</router-link>
           </div>
         </div>
       </div>
@@ -63,8 +64,19 @@
 </template>
 
 <script>
-  export default {
+import { mapGetters } from "vuex";
+export default {
+  computed: {
+    ...mapGetters({
+      user: "auth/authUser"
+    })
+  },
+  methods: {
+    logout(){
+      this.$store.dispatch('auth/logout')
+    }
   }
+};
 </script>
 
 <style scoped>

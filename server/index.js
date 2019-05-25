@@ -2,16 +2,18 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const config = require('./config/dev');
-const session = require('express-session');
 const passport = require('passport');
+
+
+// Only For Session Authentication !
+/* const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 
 const store = new MongoDBStore({
   uri: config.DB_URI,
   collection: 'meetuperSessions'
-})
-
-store.on('error', (error) => console.log(error))
+}) 
+store.on('error', (error) => console.log(error)) */
 
 
 require("./models/meetups");
@@ -35,7 +37,9 @@ const app = express();
 
 app.use(bodyParser.json());
 
-app.use(session({ secret: config.SESSION_SECRET ,
+
+// Only For Session Authentication !
+/* app.use(session({ secret: config.SESSION_SECRET ,
                   cookie: { maxAge: 3600000 },
                   resave: false,
                   saveUninitialized: false,
@@ -43,7 +47,7 @@ app.use(session({ secret: config.SESSION_SECRET ,
                   }))
 
 app.use(passport.initialize());
-app.use(passport.session());
+app.use(passport.session()); */
 
 app.use('/api/v1/meetups', meetupsRoutes);
 app.use('/api/v1/users', usersRoutes);
