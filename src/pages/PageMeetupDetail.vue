@@ -4,10 +4,10 @@
       <div class="hero-body">
         <div class="container">
           <h2 class="subtitle">
-            {{ meetup.startDate | formatDate }}
+            {{meetup.startDate | formatDate}}
           </h2>
           <h1 class="title">
-            {{ meetup.title }}
+            {{meetup.title}}
           </h1>
           <article class="media v-center">
             <figure class="media-left">
@@ -18,7 +18,7 @@
             <div class="media-content">
               <div class="content">
                 <p>
-                  Created by <strong>{{ meetupCreator.name }}</strong>
+                  Created by <strong>{{meetupCreator.name}}</strong>
                 </p>
               </div>
             </div>
@@ -38,19 +38,19 @@
               <div class="meetup-side-box">
                 <div class="meetup-side-box-date m-b-sm">
                   <p><b>Date</b></p>
-                  <p>{{ meetup.startDate | formatDate }}</p>
+                  <p>{{meetup.startDate | formatDate}}</p>
                 </div>
                 <div class="meetup-side-box-date m-b-sm">
                   <p><b>Time</b></p>
-                  <span>{{ meetup.timeFrom }}</span> - <span>{{ meetup.timeTo }}</span>
+                  <span>{{meetup.timeFrom}}</span> - <span>{{meetup.timeTo}}</span>
                 </div>
                 <div class="meetup-side-box-place m-b-sm">
                   <p><b>How to find us</b></p>
-                  <p>{{ meetup.location }}</p>
+                  <p>{{meetup.location}}</p>
                 </div>
                 <div class="meetup-side-box-more-info">
                   <p><b>Additional Info</b></p>
-                  <p>{{ meetup.shortInfo }}</p>
+                  <p>{{meetup.shortInfo}}</p>
                 </div>
               </div>
               <div class="meetup-side-box-map">
@@ -61,17 +61,14 @@
                 Threads
               </p>
               <ul>
-                <li v-for="thread in threads"
-                    :key="thread._id">{{ thread.title }}</li>
+                <li v-for="thread in threads" :key="thread._id">{{thread.title}}</li>
               </ul>
               <p class="menu-label">
                 Who is Going
               </p>
               <div class="columns is-multiline is-mobile">
                 <!-- Joined People Images Here -->
-                <div v-for="person in meetup.joinedPeople"
-                     :key="person._id"
-                     class="column is-3">
+                <div v-for="person in meetup.joinedPeople" :key="person._id" class="column is-3">
                   <figure class="image is-64x64">
                     <img class="is-rounded" :src="person.avatar" alt="Image">
                   </figure>
@@ -83,7 +80,7 @@
           <div class="column is-7 is-offset-1">
             <div class="content is-medium">
               <h3 class="title is-3">About the Meetup</h3>
-              <p>{{ meetup.description }}</p>
+              <p>{{meetup.description}}</p>
               <!-- Join Meetup, We will handle it later (: -->
               <button class="button is-primary">Join In</button>
               <!-- Not logged In Case, handle it later (: -->
@@ -93,11 +90,9 @@
             <!-- Thread List START -->
             <div class="content is-medium">
               <h3 class="title is-3">Threads</h3>
-              <div v-for="thread in threads"
-                   :key="thread._id"
-                   class="box">
+              <div v-for="thread in threads" :key="thread._id" class="box">
                 <!-- Thread title -->
-                <h4 id="const" class="title is-3">{{ thread.title }}</h4>
+                <h4 id="const" class="title is-3">{{thread.title}}</h4>
                 <!-- Create new post, handle later -->
                 <form class="post-create">
                   <div class="field">
@@ -109,9 +104,7 @@
                 </form>
                 <!-- Create new post END, handle later -->
                 <!-- Posts START -->
-                <article v-for="post in thread.posts"
-                         :key="post._id"
-                         class="media post-item">
+                <article v-for="post in thread.posts" :key="post._id" class="media post-item">
                   <figure class="media-left is-rounded user-image">
                     <p class="image is-32x32">
                       <img class="is-rounded" :src="post.user.avatar">
@@ -121,11 +114,12 @@
                     <div class="content is-medium">
                       <div class="post-content">
                         <!-- Post User Name -->
-                        <strong class="author">{{ post.user.name }}</strong>
+                        <strong class="author">{{post.user.name}}</strong>
+                        {{' '}}
                         <!-- Post Updated at -->
-                        <small class="post-time"> {{ post.updatedAt | formatDate('LLL') }}</small>
+                        <small class="post-time">{{post.updatedAt | formatDate('LLL')}}</small>
                         <br>
-                        <p class="post-content-message">{{ post.text }}</p>
+                        <p class="post-content-message">{{post.text}}</p>
                       </div>
                     </div>
                   </div>
@@ -142,16 +136,29 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+  import { mapActions, mapState } from 'vuex'
   export default {
-    name: 'PageMeetupDetail',
     computed: {
       ...mapState({
-        meetup:state=> state.meetups.item,
+        meetup: state => state.meetups.item,
         threads: state => state.threads.items
       }),
-      meetupCreator() {
+      meetupCreator () {
         return this.meetup.meetupCreator || {}
+      },
+      isAuthenticated () {
+        return this.$store.getters['auth/isAuthenticated']
+      },
+      isMeetupOwner () {
+        return this.$store.getters['auth/isMeetupOwner'](this.meetupCreator._id)
+      },
+      isMember () {
+        return this.$store.getters['auth/isMember'](this.meetup._id)
+      },
+      canJoin () {
+        return !this.isMeetupOwner &&
+                this.isAuthenticated &&
+               !this.isMember
       }
     },
     created () {
@@ -283,9 +290,9 @@ import { mapActions, mapState } from 'vuex'
     margin-right: 15px;
   }
 
-  /* .post-item {
+  .post-item {
 
-  } */
+  }
 
   .media + .media {
     border: none;
@@ -308,5 +315,4 @@ import { mapActions, mapState } from 'vuex'
   }
   // Thread List END
 </style>
-
 

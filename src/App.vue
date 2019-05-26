@@ -17,8 +17,8 @@ export default {
     TheNavbar,
     TheFooter
   },
-  computed:{
-    isAuthResolved() {
+  computed: {
+    isAuthResolved () {
       return this.$store.state.auth.isAuthResolved
     }
   }
@@ -26,10 +26,6 @@ export default {
 </script>
 
 <style lang="scss">
-
-.page-wrapper {
-  min-height: 61vh;
-}
 @import 'assets/css/spacing.css';
 @import '~bulma/bulma.sass';
 
@@ -38,6 +34,10 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
+}
+
+.page-wrapper {
+  min-height: 55vh;
 }
 
 .bold {

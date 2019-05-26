@@ -62,8 +62,8 @@
       }
     },
     methods: {
-      emitFormData(){
-        this.$emit('stepUpdated', { data: this.form, isValid: !this.$v.$invalid })
+      emitFormData () {
+        this.$emit('stepUpdated', {data: this.form, isValid: !this.$v.$invalid})
       }
     }
   }

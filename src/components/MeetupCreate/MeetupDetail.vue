@@ -12,38 +12,33 @@
       </div>
     </div>
     <div class="field">
-      <label class="title m-b-sm">Starts Date</label>
+      <label class="title m-b-sm">Start Date</label>
       <datepicker @input="setDate"
-                  :placeholder="new Date() | formatDate"
                   :disabledDates="disabledDates"
-                  :input-class="'input'"></datepicker>
+                  :input-class="'input'"
+                  :placeholder="new Date | formatDate"></datepicker>
       <div v-if="$v.form.startDate.$error">
         <span v-if="!$v.form.startDate.required" class="help is-danger">Starts at is required</span>
       </div>
     </div>
     <div class="field">
       <label class="title m-b-sm">From</label>
-      <vue-timepicker :minute-interval="10" @change="changeTime($event, 'timeFrom')"></vue-timepicker>
-
+      <vue-timepicker :minute-interval="10"
+                      @change="changeTime($event, 'timeFrom')"></vue-timepicker>
     </div>
-          <div v-if="$v.form.timeFrom.$error">
-        <span v-if="!$v.form.timeFrom.required" class="help is-danger">From is required</span>
-      </div>
     <div class="field">
       <label class="title m-b-sm">To</label>
-      <vue-timepicker :minute-interval="10" @change="changeTime($event, 'timeTo')"></vue-timepicker>
+      <vue-timepicker :minute-interval="10"
+                      @change="changeTime($event, 'timeTo')"></vue-timepicker>
     </div>
-          <div v-if="$v.form.timeTo.$error">
-        <span v-if="!$v.form.timeTo.required" class="help is-danger">To is required</span>
-      </div>
     <div class="field">
       <label class="title m-b-sm">Please Choose the Category.</label>
       <div class="m-b-lg">
         <div class="select">
           <!-- TODO: Get Here Categories -->
-         <select v-model="form.category" 
-                 @blur="$v.form.category.$touch()"
-                 @change="emitFormData">
+          <select v-model="form.category"
+                  @blur="$v.form.category.$touch()"
+                  @change="emitFormData">
             <option v-for="category of categories"
                     :value="category"
                     :key="category.id">{{category.name}}</option>
@@ -58,51 +53,31 @@
 </template>
 
 <script>
-  import { required } from 'vuelidate/lib/validators'
   import Datepicker from 'vuejs-datepicker'
-  import moment from 'moment'
   import VueTimepicker from 'vue2-timepicker'
+  import moment from 'moment'
+  import { required } from 'vuelidate/lib/validators'
   export default {
+    components: {
+      Datepicker,
+      VueTimepicker
+    },
     data () {
       return {
-        form: {
-          title: null,
-          startDate: null,
-          timeTo: null,
-          timeFrom: null,
-          category: null
-        },
         disabledDates: {
           customPredictor: function (date) {
             const today = new Date()
             const yesterday = today.setDate(today.getDate() - 1)
             return date < yesterday
           }
+        },
+        form: {
+          title: null,
+          startDate: null,
+          timeTo: null,
+          timeFrom: null,
+          category: null
         }
-      }
-    },
-    components: {
-      Datepicker,
-      VueTimepicker
-    },
-    computed: {
-      categories() {
-        return this.$store.state.categories.items
-      }
-    },
-    methods:{
-      changeTime({ data }, name) {
-        const minutes = data.mm || '00'
-        const hours = data.HH || '00'
-        this.form[name] = hours + ':' + minutes
-        this.emitFormData()
-      },
-      setDate(date) {
-        this.form.startDate = moment(date).format()
-        this.emitFormData()
-      },
-      emitFormData(){
-        this.$emit('stepUpdated', { data: this.form, isValid: !this.$v.$invalid })
       }
     },
     validations: {
@@ -112,6 +87,26 @@
         category: { required },
         timeTo: { required },
         timeFrom: { required }
+      }
+    },
+    computed: {
+      categories () {
+        return this.$store.state.categories.items
+      }
+    },
+    methods: {
+      emitFormData () {
+        this.$emit('stepUpdated', {data: this.form, isValid: !this.$v.$invalid})
+      },
+      setDate (date) {
+        this.form.startDate = moment(date).format()
+        this.emitFormData()
+      },
+      changeTime ({data}, field) {
+        const minutes = data.mm || '00'
+        const hours = data.HH || '00'
+        this.form[field] = hours + ':' + minutes
+        this.emitFormData()
       }
     }
   }

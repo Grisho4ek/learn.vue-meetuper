@@ -3,7 +3,7 @@
     <AppHero />
     <section class="section">
       <div class="container">
-        <MeetupCreateWizard @meetupConfirmed="createNewMeetup" />
+        <MeetupCreateWizard @meetupConfirmed="createMeetup"/>
       </div>
     </section>
   </div>
@@ -15,19 +15,26 @@
     components: {
       MeetupCreateWizard
     },
+    computed: {
+      categories () {
+        return this.$store.state.categories.items
+      }
+    },
+    created () {
+      if (this.categories.length === 0) {
+        this.$store.dispatch('categories/fetchCategories')
+      }
+    },
     methods: {
-    createNewMeetup(newMeetup) {
-
-      this.$store.dispatch('meetups/createMeetup', newMeetup)
-        .then((createdMeetup) => {
-          this.$router.push(`/meetups/${createdMeetup._id}`)
-        })
-        .catch((errorMessage) => {
-          this.$toasted.error(errorMessage, {duration: 5000})
-        })
+      createMeetup (meetupToCreate) {
+        this.$store.dispatch('meetups/createMeetup', meetupToCreate)
+          .then(createdMeetup => {
+            this.$router.push(`/meetups/${createdMeetup._id}`)
+          })
+          .catch(err => console.log(err))
       }
     }
-}
+  }
 </script>
 
 <style scoped lang="scss">

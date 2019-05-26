@@ -56,18 +56,14 @@
 </template>
 
 <script>
-  import { mapActions, mapState} from 'vuex'
   export default {
     computed: {
-      ...mapState({
-        meetups: state => state.meetups.items
-      })
+      meetups () {
+        return this.$store.state.meetups.items
+      }
     },
     created () {
-      this.fetchMeetups();
-    }, 
-    methods: {
-      ...mapActions('meetups', ['fetchMeetups'])
+      this.$store.dispatch('meetups/fetchMeetups')
     }
   }
 </script>

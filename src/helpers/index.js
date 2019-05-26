@@ -1,8 +1,8 @@
-export const rejectError = ({ response = null }) => {
-  
-  let message = 'Oops something went wrong'
 
-  if(response && response.data && response.data.errors) {
+export const rejectError = ({response = null}) => {
+  let message = 'Ooops, something went wrong'
+
+  if (response && response.data && response.data.errors) {
     message = response.data.errors.message
   }
 

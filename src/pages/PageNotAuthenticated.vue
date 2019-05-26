@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <ErrorView :title="'Ooooops, you are not authenticated to visit this page'"
+    <ErrorView :title="'Ooooops, you are not authenticated to visit this page, please login'"
                :status="'401'"
                :navigateToPage="'PageLogin'"
                :navigateToText="'Navigate to Login Page'" />

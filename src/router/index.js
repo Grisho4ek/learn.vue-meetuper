@@ -5,12 +5,12 @@ import store from '@/store'
 import PageHome from '@/pages/PageHome'
 import PageMeetupDetail from '@/pages/PageMeetupDetail'
 import PageMeetupFind from '@/pages/PageMeetupFind'
-import PageNotfound from '@/pages/PageNotFound'
-import PageRegister from '@/pages/PageRegister'
-import PageLogin from '@/pages/PageLogin'
-import PageSecret from '@/pages/PageSecret'
-import PageNotAuthenticated from '@/pages/PageNotAuthenticated'
 import PageMeetupCreate from '@/pages/PageMeetupCreate'
+import PageLogin from '@/pages/PageLogin'
+import PageRegister from '@/pages/PageRegister'
+import PageSecret from '@/pages/PageSecret'
+import PageNotFound from '@/pages/PageNotFound'
+import PageNotAuthenticated from '@/pages/PageNotAuthenticated'
 
 Vue.use(Router)
 
@@ -44,51 +44,59 @@ const router = new Router({
       component: PageMeetupDetail
     },
     {
-      path:'/register',
+      path: '/login',
+      name: 'PageLogin',
+      component: PageLogin,
+      meta: { onlyGuestUser: true }
+    },
+    {
+      path: '/register',
       name: 'PageRegister',
       component: PageRegister,
       meta: { onlyGuestUser: true }
     },
     {
-      path:'/login',
-      name: 'PageLogin',
-      component: PageLogin,
-      meta: { onlyGuestUser: true }
-    },
-    { 
       path: '/401',
       name: 'PageNotAuthenticated',
       component: PageNotAuthenticated
     },
-    { 
+    {
       path: '*',
       name: 'PageNotFound',
-      component: PageNotfound
+      component: PageNotFound
     }
   ],
   mode: 'history'
 })
 
+
 router.beforeEach((to, from, next) => {
-  store.dispatch("auth/getAuthUser").then(() => {
-    const isAuthenticated = store.getters["auth/isAuthenticated"];
-    if (to.meta.onlyAuthUser) {
-      if (isAuthenticated) {
-        next();
+  store.dispatch('auth/getAuthUser')
+    .then(() => {
+      const isAuthenticated = store.getters['auth/isAuthenticated']
+
+      if (to.meta.onlyAuthUser) {
+        if (isAuthenticated) {
+          next()
+        } else {
+          next({name: 'PageNotAuthenticated'})
+        }
+      } else if (to.meta.onlyGuestUser) {
+        if (isAuthenticated) {
+          next({name: 'PageHome'})
+        } else {
+          next()
+        }
       } else {
-        next({ name: "PageNotAuthenticated" });
+        next()
       }
-    } else if (to.meta.onlyGuestUser) {
-      if (isAuthenticated) {
-        next({ name: "PageHome" });
-      } else {
-        next();
-      }
-    } else {
-      next();
-    }
-  });
-});
+    })
+})
+
+
+
+
+
 
 
 export default router

@@ -7,55 +7,55 @@
         <span class="result-title">
         Location
         </span>
-        <p>{{ meetupToCreate.location }}</p>
+        <p>{{meetupToCreate.location}}</p>
       </div>
       <div>
         <span class="result-title">
         Title
         </span>
-        <p>{{ meetupToCreate.title }}</p>
+        <p>{{meetupToCreate.title}}</p>
       </div>
       <div>
         <span class="result-title">
         Start Date
         </span>
-        <p>{{ meetupToCreate.startDate | formatDate }}</p>
+        <p>{{meetupToCreate.startDate | formatDate}}</p>
       </div>
       <div>
         <span class="result-title">
         From
         </span>
-        <p>{{ meetupToCreate.timeFrom }}</p>
+        <p>{{meetupToCreate.timeFrom}}</p>
       </div>
       <div>
         <span class="result-title">
         To
         </span>
-        <p>{{ meetupToCreate.timeTo }}</p>
+        <p>{{meetupToCreate.timeTo}}</p>
       </div>
       <div>
         <span class="result-title">
         Category
         </span>
-        <p>{{ meetupToCreate.category.name }}</p>
+        <p>{{meetupToCreate.category.name}}</p>
       </div>
       <div>
         <span class="result-title">
         Image
         </span>
-        <p>{{ meetupToCreate.image }}</p>
+        <p>{{meetupToCreate.image}}</p>
       </div>
       <div>
         <span class="result-title">
         Short Info
         </span>
-        <p>{{ meetupToCreate.shortInfo }}</p>
+        <p>{{meetupToCreate.shortInfo}}</p>
       </div>
       <div>
         <span class="result-title">
         Description
         </span>
-        <p>{{ meetupToCreate.description }}</p>
+        <p>{{meetupToCreate.description}}</p>
       </div>
     </div>
   </div>
@@ -65,8 +65,8 @@
   export default {
     props: {
       meetupToCreate: {
-        type: Object,
-        requiered: true
+        required: true,
+        type: Object
       }
     },
     validations: {}
