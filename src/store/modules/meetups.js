@@ -1,5 +1,6 @@
 import axios from 'axios'
 import axiosInstance from '@/services/axios'
+import Vue from 'vue'
 
 export default {
   namespaced: true,
@@ -33,6 +34,36 @@ export default {
 
       return axiosInstance.post('/api/v1/meetups', meetupToCreate)
         .then(res => res.data)
+    },
+    joinMeetup({ state, rootState, commit, dispatch}, meetupId) {
+      const user = rootState.auth.user
+
+      return axiosInstance.post(`/api/v1/meetups/${meetupId}/join`)
+              .then(() => {
+                dispatch('auth/addMeetuptoAuthUser', meetupId, {root: true})
+
+                const joinedPeople = state.item.joinedPeople
+                commit('updateUserMeetup', [...joinedPeople, user])
+                return true
+              })
+    },
+    leaveMeetup({state, rootState, dispatch, commit}, meetupId){
+      const user = rootState.auth.user
+
+      return axiosInstance.post(`/api/v1/meetups/${meetupId}/leave`)
+              .then(() => {
+                dispatch('auth/removeMeetupFromAuthUser', meetupId, {root: true})
+
+                let joinedPeople = state.item.joinedPeople                
+                joinedPeople = joinedPeople.filter(el => el._id !== user._id)
+                commit('updateUserMeetup', joinedPeople)
+              })
+      
+    }
+  },
+  mutations: {
+    updateUserMeetup(state, joinedPeople) {
+      Vue.set(state.item, 'joinedPeople', joinedPeople)
     }
   }
 }

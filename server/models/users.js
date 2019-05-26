@@ -14,10 +14,10 @@ const userSchema = new Schema({
            match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/]},
   name: { type: String,
           required: true,
-          minlength: [6, 'Too short, min is 6 characters']},
+          minlength: [3, 'Too short, min is 6 characters']},
   username: { type: String,
           required: true,
-          minlength: [6, 'Too short, min is 6 characters']},
+          minlength: [3, 'Too short, min is 6 characters']},
   password: {
     type: String,
     minlength: [4, 'Too short, min is 4 characters'],
