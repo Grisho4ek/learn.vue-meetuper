@@ -28,10 +28,20 @@
         text: null
       }
     },
+    computed: {
+      meetup() {
+        return this.$store.state.meetups.item
+      }
+    },
     methods: {
       createPost() {
         this.$store.dispatch('threads/sendPost', {text: this.text, threadId: this.threadId})
-              .then(() => { this.text = null})
+              .then((createdPost) => { 
+          this.$socket.emit('meetup/postSaved',
+           {...createdPost, meetup: this.meetup._id}
+          )
+          this.text = ''
+        })
       }
     }
   }
