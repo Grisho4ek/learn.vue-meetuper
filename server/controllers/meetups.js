@@ -68,8 +68,8 @@ exports.joinMeetup = function (req, res) {
     return Promise.all(
       [meetup.save(),
       User.updateOne({ _id: user.id }, { $push: { joinedMeetups: meetup }})])
-      .then(result => res.json({id}))
-      .catch(errors => res.status(422).send({errors}))
+        .then(() => res.json({id}))
+        .catch(errors => res.status(422).send({errors}))
   })
 }
 
@@ -81,8 +81,8 @@ exports.leaveMeetup = function (req, res) {
   Promise.all(
     [Meetup.updateOne({ _id: id }, { $pull: { joinedPeople: user.id }, $inc: {joinedPeopleCount: -1}}),
      User.updateOne({ _id: user.id }, { $pull: { joinedMeetups: id }})])
-    .then(result => res.json({id}))
-    .catch(errors => res.status(422).send({errors}))
+      .then(() => res.json({id}))
+      .catch(errors => res.status(422).send({errors}))
 }
 
 

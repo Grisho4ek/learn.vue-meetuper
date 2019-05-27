@@ -54,9 +54,9 @@ export default {
               .then(() => {
                 dispatch('auth/removeMeetupFromAuthUser', meetupId, {root: true})
 
-                let joinedPeople = state.item.joinedPeople                
-                joinedPeople = joinedPeople.filter(el => el._id !== user._id)
-                commit('updateUserMeetup', joinedPeople)
+                const joinedPeople = state.item.joinedPeople                
+                const newJoinedPeople = joinedPeople.filter(el => el._id !== user._id)
+                commit('updateUserMeetup', newJoinedPeople)
               })
       
     }
