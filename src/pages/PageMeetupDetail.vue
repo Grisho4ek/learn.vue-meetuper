@@ -104,6 +104,9 @@
             </div>
             <!-- Thread List START -->
             <ThreadList :threads="orderedThreads" :canMakePost="canMakePost"/>
+            <button v-if="!isAllThreadsLoaded"
+                    @click="fetchThreadsHandler" 
+                    class="button is-primary">Load More Threads</button>
             <!-- Thread List END -->
           </div>
         </div>
@@ -121,11 +124,18 @@ export default {
     ThreadCreateModal,
     ThreadList
   },
+  data(){
+    return {
+      threadPageNum: 1,
+      trheadPageSize: 5
+    }
+  },
   computed: {
     ...mapState({
       meetup: state => state.meetups.item,
       threads: state => state.threads.items,
-      authUser: state => state.auth.user
+      authUser: state => state.auth.user,
+      isAllThreadsLoaded: state => state.threads.isAllThreadsLoaded,
     }),
     meetupCreator() {
       return this.meetup.meetupCreator || {};
@@ -155,7 +165,7 @@ export default {
   created() {
     const meetupId = this.$route.params.id;
     this.fetchMeetupById(meetupId);
-    this.fetchThreads(meetupId);
+    this.fetchThreadsHandler({meetupId, init: true})
     
     if (this.isAuthenticated) {
       this.$socket.emit("meetup/subscribe", meetupId);
@@ -169,6 +179,17 @@ export default {
   methods: {
     ...mapActions("meetups", ["fetchMeetupById"]),
     ...mapActions("threads", ["fetchThreads", "postThread", "addPostToThread"]),
+    fetchThreadsHandler({meetupId, init}) {
+      const filter = {
+        pageNum: this.threadPageNum,
+        pageSize: this.trheadPageSize
+      }
+
+      this.fetchThreads({meetupId: meetupId || this.meetup._id, filter, init})
+        .then(()=>{
+          this.threadPageNum++
+        })
+    },
     joinMeetup() {
       this.$store.dispatch(`meetups/joinMeetup`, this.meetup._id);
     },
