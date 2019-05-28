@@ -69,7 +69,7 @@
                   <!-- TODO: Display Meetup title -->
                   <p class="title is-4">"{{ meetup.title }}</p>
                   <!-- TODO: Display Category name -->
-                  <p class="subtitle is-6"><span class="tag is-dark subtitle">{{ meetup.category.name }}</span></p>
+                  <span class="tag is-dark subtitle">{{meetup.category.name | capitalize}}</span>
                 </div>
               </div>
               <div class="content">
@@ -80,7 +80,7 @@
               </div>
             </div>
             <footer class="card-footer">
-              <a class="card-footer-item">Share</a>
+              <router-link :to="{name: 'PageMeetupEdit', params: {meetupId: meetup._id}}" class="card-footer-item">Edit</router-link>
               <a class="card-footer-item">Delete</a>
             </footer>
           </div>
