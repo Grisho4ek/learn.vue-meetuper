@@ -231,7 +231,7 @@ exports.updateUser = (req, res) => {
   const userId = req.params.id;
   const userData = req.body;
   const user = req.user;
-
+  
   if (user.id === userId) {
     // new: bool - true to return the modified document rather than the original. defaults to false
     User.findByIdAndUpdate(userId, { $set: userData}, { new: true }, (errors, updatedUser) => {

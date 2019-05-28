@@ -104,11 +104,21 @@ export default {
       const index = userMeetupsIds.findIndex(userMeetupsId => userMeetupsId === meetupId)
       userMeetupsIds.splice(index, 1)
       commit('updateAuthUserMeetups', userMeetupsIds)
+    },
+    updateUser({ commit }, user){
+      return axiosInstance.patch(`/api/v1/users/${user._id}`, user)
+              .then((res) => {
+                const updatedUser = res.data
+                commit('setAuthUser', updatedUser)
+                return updatedUser
+              })
+
     }
   },
   mutations: {
     setAuthUser (state, user) {
-      return state.user = user
+      return Vue.set(state, 'user', user)
+      // return state.user = user
     },
     setAuthState (state, authState) {
       return state.isAuthResolved = authState
